@@ -1,0 +1,170 @@
+/* --- 1. Global Variables & Reset --- */
+:root {
+    --primary-color: #333; /* Dark text color */
+    --secondary-color: #f0f0f0; /* Light gray backgrounds */
+    --accent-color: #a7c7e7; /* Pastel blue from your sketch */
+    --sidebar-width: 250px;
+    --nav-height: 90px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    color: var(--primary-color);
+    line-height: 1.6;
+}
+
+/* --- 2. Shared Navigation Bar --- */
+.navbar {
+    height: var(--nav-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background: #fff;
+    border-bottom: 2px solid #ccc;
+    position: fixed; /* Keeps nav stuck to top */
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.site-title {
+    font-weight: bold;
+    font-size: 2rem;
+    text-decoration: none;
+    color: black;
+}
+
+.nav-links a {
+    margin-left: 30px;
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+.nav-links a:hover { color: black; }
+
+
+/* --- 3. CSS for Welcome Page (index.html) --- */
+/* Add padding to body so content doesn't get stuck under fixed nav */
+body.welcome-page { padding-top: var(--nav-height); }
+
+.hero-section {
+    height: 60vh; /* 60% of viewport height */
+    background-color: #ccc; /* Placeholder for map preview image */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.hero-button {
+    margin-top: 20px;
+    padding: 10px 25px;
+    background: white;
+    border: 1px solid #333;
+    cursor: pointer;
+}
+
+.content-section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* The 3-column grid used in sketch 1 */
+.three-col-grid {
+    display: grid;
+    /* Auto-fit creates columns that are at least 250px wide */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+/* Archive items style */
+.archive-item .placeholder-img {
+    height: 150px;
+    background: white;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+/* Related event items style */
+.event-item {
+    background-color: var(--accent-color);
+    height: 250px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+.footer {
+    background: var(--secondary-color);
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+
+/* --- 4. CSS for Mapping Page Layout (map.html) --- */
+/* This is the complex layout from image_0.png */
+
+/* Wrapper to fill screen minus nav bar */
+.map-layout-wrapper {
+    display: flex;
+    height: calc(100vh - var(--nav-height));
+    margin-top: var(--nav-height);
+    overflow: hidden; /* Prevents double scrollbars */
+}
+
+/* The Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    background: #fff;
+    border-right: 2px solid #ccc;
+    padding: 20px;
+    overflow-y: auto; /* Allows sidebar to scroll independently */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: width 0.3s ease; /* Smooth transition for collapsing later */
+}
+
+.sidebar-section {
+    border: 2px solid black;
+    padding: 10px;
+}
+
+/* The container for the Map and the Bottom Details box */
+.map-details-container {
+    flex: 1; /* Takes up all remaining width */
+    display: flex;
+    flex-direction: column;
+}
+
+/* The Map Area */
+#map {
+    flex: 1; /* Takes up all available vertical space */
+    background-color: #ddd; /* Placeholder color for map */
+    /* LEAFLET CSS WILL GO HERE LATER */
+}
+
+/* The Bottom Details Box */
+.details-box {
+    height: auto; /* Adjusts to content */
+    min-height: 150px; /* Minimum height when active */
+    background: var(--secondary-color);
+    border-top: 2px solid #333;
+    padding: 20px;
+    text-align: center;
+    /* We will use Javascript later to hide/show this */
+}

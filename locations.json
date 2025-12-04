@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Colonial Exhibition Entrance",
+    "lat": 52.4875,
+    "lng": 13.4677,
+    "category": "exhibition",
+    "description": "The main entrance gate stood here in 1896."
+  },
+  {
+    "id": 2,
+    "name": "water",
+    "lat": 52.4880,
+    "lng": 13.4690,
+    "category": "landmark",
+    "description": "A historic xxx remaining from the era."
+  }
+]

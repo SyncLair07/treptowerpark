@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map - Colonial History of Treptower Park</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar" style="border-bottom: none; border-right: 2px solid black;">
+         <div style="display:flex; align-items:center;">
+            <a href="index.html" class="site-title" style="border-right: 2px solid black; padding-right: 20px; margin-right: 20px;">Website Name</a>
+            <a href="#" style="margin-right: 20px; color:black; text-decoration:none; font-weight:bold;">About</a>
+            <a href="#" style="color:black; text-decoration:none; font-weight:bold;">Archive</a>
+        </div>
+        <div class="nav-links">
+            <button style="padding: 5px 15px; background:white; border: 2px solid black; font-weight:bold; margin-right:10px;">Upload</button>
+            <button style="padding: 5px 15px; background:white; border: 2px solid black; font-weight:bold;">Profile</button>
+        </div>
+    </nav>
+
+    <div class="map-layout-wrapper">
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-section">
+                <strong>Filter</strong><br>
+                <input type="checkbox" id="filter1" name="filter1">
+                <label for="filter1"> Exhibition Spots</label><br>
+                <input type="checkbox" id="filter2" name="filter2">
+                 <label for="filter2"> Colonial Markers</label>
+            </div>
+
+            <div class="sidebar-section">
+                <strong>Search Bar</strong><br>
+                <input type="text" placeholder="Search..." style="width: 100%; padding: 5px;">
+            </div>
+
+            <div class="sidebar-section" style="flex:1;">
+                <strong>Sidebar (Expandable)</strong><br>
+                <p>Additional content...</p>
+                <button onclick="toggleSidebar()" style="margin-top:20px;">Test Collapse</button>
+            </div>
+        </aside>
+
+        <main class="map-details-container">
+            
+            <div id="map"></div>
+
+            <section class="details-box" id="detailsBox">
+                <strong>Detailed Info</strong>
+                <p>(Shown when sidebar item selected, Hidden Default)</p>
+                <button onclick="toggleDetails()">Test Hide Details</button>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        /* --- A. BASIC MAP SETUP (Placeholder for now) --- */
+        // This initializes a basic map centered on Berlin
+       /* --- Inside the script tag in map.html --- */
+
+// 1. Initialize Map (Keep this part)
+var map = L.map('map').setView([52.4875, 13.4677], 15);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+// 2. FETCH DATA & CREATE PINS (The New Part)
+fetch('locations.json')
+  .then(response => response.json())
+  .then(data => {
+      // 'data' is now the list from your JSON file
+      data.forEach(spot => {
+          
+          // Create a marker for each spot
+          var marker = L.marker([spot.lat, spot.lng]).addTo(map);
+          
+          // Add a popup with the name and description
+          marker.bindPopup(`<b>${spot.name}</b><br>${spot.description}`);
+      });
+  })
+  .catch(error => console.error('Error loading map data:', error));
+
+
+        /* --- B. INTERACTIVITY SCRIPTS (Collapsing elements) --- */
+        
+        // 1. Script to toggle the Sidebar width
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.width === '0px') {
+                sidebar.style.width = 'var(--sidebar-width)'; // Open
+            } else {
+                sidebar.style.width = '0px'; // Collapse
+            }
+        }
+
+        // 2. Script to toggle the bottom Details Box
+        function toggleDetails() {
+            const detailsBtn = document.getElementById('detailsBox');
+            if (detailsBtn.style.display === 'none') {
+                detailsBtn.style.display = 'block'; // Show
+            } else {
+                detailsBtn.style.display = 'none'; // Hide
+            }
+        }
+
+        // Initialize details box as hidden (as per sketch)
+        toggleDetails();
+    </script>
+
+</body>
+</html>
