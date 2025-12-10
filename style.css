@@ -124,7 +124,7 @@ body.welcome-page { padding-top: var(--nav-height); }
     height: calc(100vh - var(--nav-height));
     margin-top: var(--nav-height);
     position: relative;
-    overflow: hidden; /* Prevents double scrollbars */
+    overflow: auto; 
 }
 
 /* The Sidebar */
@@ -258,7 +258,7 @@ body.welcome-page { padding-top: var(--nav-height); }
 
     body, html {
         height: 100%;
-        overflow: hidden; 
+        overflow: auto; 
     }
 
     .map-layout-wrapper {
