@@ -1,25 +1,27 @@
-/* --- 1. Global Variables & Reset --- */
+/* ---Global Variables & Reset --- */
 :root {
     --primary-color: #333; /* Dark text color */
     --secondary-color: #f0f0f0; /* Light gray backgrounds */
     --accent-color: #a7c7e7; /* Pastel blue from your sketch */
-    --sidebar-width: 250px;
-    --nav-height: 90px;
+    --sidebar-width: 350px;
+    --nav-height:100px;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-size: 20px;
 }
 
 body {
     font-family: sans-serif;
     color: var(--primary-color);
     line-height: 1.6;
+    font-weight: 400;
 }
 
-/* --- 2. Shared Navigation Bar --- */
+/* --- Shared Navigation Bar --- */
 .navbar {
     height: var(--nav-height);
     display: flex;
@@ -51,7 +53,7 @@ body {
 .nav-links a:hover { color: black; }
 
 
-/* --- 3. CSS for Welcome Page (index.html) --- */
+/* --- CSS for Welcome Page (index.html) --- */
 /* Add padding to body so content doesn't get stuck under fixed nav */
 body.welcome-page { padding-top: var(--nav-height); }
 
@@ -76,7 +78,7 @@ body.welcome-page { padding-top: var(--nav-height); }
 
 .content-section {
     padding: 40px 20px;
-    max-width: 1200px;
+    max-width: 92%;
     margin: 0 auto;
 }
 
@@ -84,9 +86,9 @@ body.welcome-page { padding-top: var(--nav-height); }
 .three-col-grid {
     display: grid;
     /* Auto-fit creates columns that are at least 250px wide */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin-top: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    margin-top: 30px;
 }
 
 /* Archive items style */
@@ -115,10 +117,8 @@ body.welcome-page { padding-top: var(--nav-height); }
 }
 
 
-/* --- 4. CSS for Mapping Page Layout (map.html) --- */
-/* This is the complex layout from image_0.png */
+/* ---  CSS for Mapping Page Layout (map.html) --- */
 
-/* Wrapper to fill screen minus nav bar */
 .map-layout-wrapper {
     display: flex;
     height: calc(100vh - var(--nav-height));
@@ -131,7 +131,7 @@ body.welcome-page { padding-top: var(--nav-height); }
     width: var(--sidebar-width);
     background: #fff;
     border-right: 2px solid #ccc;
-    padding: 20px;
+    padding: 30px;
     overflow-y: auto; /* Allows sidebar to scroll independently */
     display: flex;
     flex-direction: column;
@@ -141,7 +141,9 @@ body.welcome-page { padding-top: var(--nav-height); }
 
 .sidebar-section {
     border: 2px solid black;
-    padding: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
 }
 
 /* The container for the Map and the Bottom Details box */
@@ -155,7 +157,8 @@ body.welcome-page { padding-top: var(--nav-height); }
 #map {
     flex: 1; /* Takes up all available vertical space */
     background-color: #ddd; /* Placeholder color for map */
-    /* LEAFLET CSS WILL GO HERE LATER */
+    width:100%;
+    z-index:1;
 }
 
 /* The Bottom Details Box */
@@ -166,5 +169,116 @@ body.welcome-page { padding-top: var(--nav-height); }
     border-top: 2px solid #333;
     padding: 20px;
     text-align: center;
-    /* We will use Javascript later to hide/show this */
+
+}
+
+/* --- Horizontal Scroll Snap Slider --- */
+.slider-container {
+    display: flex;
+    overflow-x: auto; 
+    scroll-snap-type: x mandatory; 
+    gap: 20px;
+    padding-bottom: 20px; 
+    -webkit-overflow-scrolling: touch; 
+}
+
+.slider-item {
+    flex: 0 0 300px; 
+    scroll-snap-align: start; 
+    border: 1px solid #ccc;
+    background: #fff;
+    padding: 10px;
+}
+
+.slider-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+/* --- Download Button Style  --- */
+.download-btn {
+    display: inline-block;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+.download-btn:hover {
+    background-color: #555;
+}
+
+.feature-row {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 30px;
+    margin-bottom: 40px;
+    align-items: center;
+}
+.feature-img {
+    flex: 1 1 300px; 
+}
+.feature-text {
+    flex: 1 1 300px; 
+}
+
+/* =========================================
+   MOBILE LAYOUT
+   ========================================= */
+@media screen and (max-width: 768px) {
+
+
+    .navbar {
+        height: auto;
+        padding: 10px 20px;
+        flex-direction: row; 
+        flex-wrap: wrap; 
+        justify-content: space-between;
+    }
+    
+    .site-title {
+        font-size: 1.5rem; 
+    }
+
+    .nav-links a {
+        font-size: 1rem;
+        margin-left: 15px;
+    }
+
+    .sidebar, 
+    .details-box {
+        display: none !important; 
+    }
+
+    body, html {
+        height: 100%;
+        overflow: hidden; 
+    }
+
+    .map-layout-wrapper {
+        height: calc(100vh - 80px); 
+        margin-top: 80px; 
+        flex-direction: column;
+    }
+
+    .map-details-container {
+        width: 100%;
+        height: 100%;
+        flex: 1; 
+    }
+
+    #map {
+        width: 100%;
+        height: 100% !important; 
+        background-color: #ddd; 
+    }
+
+    .three-col-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 }

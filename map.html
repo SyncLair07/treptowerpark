@@ -11,7 +11,7 @@
 
     <nav class="navbar" style="border-bottom: none; border-right: 2px solid black;">
          <div style="display:flex; align-items:center;">
-            <a href="index.html" class="site-title" style="border-right: 2px solid black; padding-right: 20px; margin-right: 20px;">Website Name</a>
+            <a href="index.html" class="site-title" style="border-right: 2px solid black; padding-right: 20px; margin-right: 20px;">Treptowerpark Archive</a>
             <a href="#" style="margin-right: 20px; color:black; text-decoration:none; font-weight:bold;">About</a>
             <a href="#" style="color:black; text-decoration:none; font-weight:bold;">Archive</a>
         </div>
@@ -29,18 +29,16 @@
                 <input type="checkbox" id="filter1" name="filter1">
                 <label for="filter1"> Exhibition Spots</label><br>
                 <input type="checkbox" id="filter2" name="filter2">
-                 <label for="filter2"> Colonial Markers</label>
+                 <label for="filter2"> Kairo Gates</label>
             </div>
 
             <div class="sidebar-section">
-                <strong>Search Bar</strong><br>
-                <input type="text" placeholder="Search..." style="width: 100%; padding: 5px;">
+                <input type="text" placeholder="Search by Keywords..." style="width: 100%; padding: 5px;">
             </div>
 
             <div class="sidebar-section" style="flex:1;">
-                <strong>Sidebar (Expandable)</strong><br>
-                <p>Additional content...</p>
-                <button onclick="toggleSidebar()" style="margin-top:20px;">Test Collapse</button>
+                <strong>Result List</strong><br>
+                <!-- <p>Additional content...</p> -->
             </div>
         </aside>
 
@@ -50,8 +48,6 @@
 
             <section class="details-box" id="detailsBox">
                 <strong>Detailed Info</strong>
-                <p>(Shown when sidebar item selected, Hidden Default)</p>
-                <button onclick="toggleDetails()">Test Hide Details</button>
             </section>
 
         </main>
@@ -112,6 +108,47 @@ fetch('locations.json')
 
         // Initialize details box as hidden (as per sketch)
         toggleDetails();
+
+// ---  GEOLOCATION  ---
+
+
+function locateUser() {
+    map.locate({setView: true, maxZoom: 16}); // setView: true 表示地图会自动飞到你的位置
+}
+
+
+function onLocationFound(e) {
+    var radius = e.accuracy;
+
+    // 用户位置蓝色圆点
+    L.circleMarker(e.latlng, {
+        radius: 8,
+        fillColor: "#3388ff",
+        color: "#fff",
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.8
+    }).addTo(map)
+      .bindPopup("You are here").openPopup();
+
+  
+    L.circle(e.latlng, radius).addTo(map);
+}
+
+//定位失败报错
+function onLocationError(e) {
+    alert("无法获取您的位置: " + e.message);
+}
+
+
+map.on('locationfound', onLocationFound);
+map.on('locationerror', onLocationError);
+
+
+<button onclick="locateUser()" style="background: #a7c7e7; border: 1px solid black; padding: 5px 10px; cursor: pointer;">
+    📍 Find My Location
+</button>
+
     </script>
 
 </body>
