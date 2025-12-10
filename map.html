@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map - Colonial History of Treptower Park</title>
+    <title>Map - Treptower Park Archive</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,8 +12,8 @@
     <nav class="navbar" style="border-bottom: none; border-right: 2px solid black;">
          <div style="display:flex; align-items:center;">
             <a href="index.html" class="site-title" style="border-right: 2px solid black; padding-right: 20px; margin-right: 20px;">Treptowerpark Archive</a>
-            <a href="#" style="margin-right: 20px; color:black; text-decoration:none; font-weight:bold;">About</a>
-            <a href="#" style="color:black; text-decoration:none; font-weight:bold;">Archive</a>
+            <a href="info.html" style="margin-right: 20px; color:black; text-decoration:none; font-weight:bold;">About</a>
+            <a href="archive.html" style="color:black; text-decoration:none; font-weight:bold;">Archive</a>
         </div>
         <div class="nav-links">
             <button style="padding: 5px 15px; background:white; border: 2px solid black; font-weight:bold; margin-right:10px;">Upload</button>
@@ -22,134 +22,157 @@
     </nav>
 
     <div class="map-layout-wrapper">
-
+        
         <aside class="sidebar" id="sidebar">
+            
             <div class="sidebar-section">
                 <strong>Filter</strong><br>
-                <input type="checkbox" id="filter1" name="filter1">
+                <input type="checkbox" id="filter1" name="filter1" checked>
                 <label for="filter1"> Exhibition Spots</label><br>
-                <input type="checkbox" id="filter2" name="filter2">
-                 <label for="filter2"> Kairo Gates</label>
+                <input type="checkbox" id="filter2" name="filter2" checked>
+                 <label for="filter2"> Landmarks / Kairo</label>
             </div>
 
             <div class="sidebar-section">
-                <input type="text" placeholder="Search by Keywords..." style="width: 100%; padding: 5px;">
+                <input type="text" id="searchInput" placeholder="Search by Keywords..." style="width: 100%; padding: 5px;">
+            </div>
+
+            <div class="sidebar-section">
+                <button onclick="locateUser()" style="width:100%; background: #a7c7e7; border: 1px solid black; padding: 5px 10px; cursor: pointer; font-weight:bold;">
+                    📍 Find My Location
+                </button>
             </div>
 
             <div class="sidebar-section" style="flex:1;">
                 <strong>Result List</strong><br>
-                <!-- <p>Additional content...</p> -->
+                <p style="font-size:0.8rem; color:grey;">(Filters apply automatically)</p>
             </div>
         </aside>
 
         <main class="map-details-container">
-            
             <div id="map"></div>
-
-            <section class="details-box" id="detailsBox">
-                <strong>Detailed Info</strong>
+            
+            <section class="details-box" id="detailsBox" style="display:none;">
+                <h3 id="detailTitle">Detailed Info</h3>
+                <p id="detailDesc">Select a marker on the map to see details.</p>
             </section>
-
         </main>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
+    
     <script>
-        /* --- A. BASIC MAP SETUP (Placeholder for now) --- */
-        // This initializes a basic map centered on Berlin
-       /* --- Inside the script tag in map.html --- */
-
-// 1. Initialize Map (Keep this part)
-var map = L.map('map').setView([52.4875, 13.4677], 15);
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
-}).addTo(map);
-
-// 2. FETCH DATA & CREATE PINS (The New Part)
-fetch('locations.json')
-  .then(response => response.json())
-  .then(data => {
-      // 'data' is now the list from your JSON file
-      data.forEach(spot => {
-          
-          // Create a marker for each spot
-          var marker = L.marker([spot.lat, spot.lng]).addTo(map);
-          
-          // Add a popup with the name and description
-          marker.bindPopup(`<b>${spot.name}</b><br>${spot.description}`);
-      });
-  })
-  .catch(error => console.error('Error loading map data:', error));
-
-
-        /* --- B. INTERACTIVITY SCRIPTS (Collapsing elements) --- */
+        // --- 1. Initialize Map ---
+        var map = L.map('map').setView([52.4875, 13.4677], 15);
         
-        // 1. Script to toggle the Sidebar width
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar.style.width === '0px') {
-                sidebar.style.width = 'var(--sidebar-width)'; // Open
-            } else {
-                sidebar.style.width = '0px'; // Collapse
-            }
+        // Load the Map Tiles (OpenStreetMap)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Layer Group for Markers (allows us to clear them later for filtering)
+        var markersLayer = L.layerGroup().addTo(map);
+        var allLocations = []; // Store data here
+
+        // --- 2. Fetch Data from JSON ---
+        fetch('locations.json')
+            .then(response => response.json())
+            .then(data => {
+                allLocations = data; // Save data
+                renderMarkers(allLocations); // Show all initially
+            })
+            .catch(error => console.error('Error loading map data:', error));
+
+        // --- 3. Render Markers Function ---
+        function renderMarkers(data) {
+            markersLayer.clearLayers(); // Clear existing markers
+            
+            data.forEach(spot => {
+                var marker = L.marker([spot.lat, spot.lng]);
+                
+                // Popup
+                marker.bindPopup(`<b>${spot.name}</b>`);
+                
+                // Click Event to update bottom box
+                marker.on('click', function() {
+                    updateDetailBox(spot);
+                });
+
+                markersLayer.addLayer(marker);
+            });
         }
 
-        // 2. Script to toggle the bottom Details Box
-        function toggleDetails() {
-            const detailsBtn = document.getElementById('detailsBox');
-            if (detailsBtn.style.display === 'none') {
-                detailsBtn.style.display = 'block'; // Show
-            } else {
-                detailsBtn.style.display = 'none'; // Hide
-            }
+        // --- 4. Update Detail Box Function ---
+        function updateDetailBox(spot) {
+            var box = document.getElementById('detailsBox');
+            box.style.display = 'block'; // Make sure it's visible
+            box.innerHTML = `
+                <div style="text-align:left;">
+                    <h3>${spot.name}</h3>
+                    <p>${spot.description}</p>
+                    ${spot.img ? `<img src="${spot.img}" style="height:100px; margin-top:5px;">` : ''}
+                    <br>
+                    <a href="${spot.link || '#'}" style="color:blue;">View in Archive &rarr;</a>
+                </div>
+            `;
         }
 
-        // Initialize details box as hidden (as per sketch)
-        toggleDetails();
+        // --- 5. Filter Logic ---
+        const searchInput = document.getElementById('searchInput');
+        const check1 = document.getElementById('filter1');
+        const check2 = document.getElementById('filter2');
 
-// ---  GEOLOCATION  ---
+        function filterData() {
+            const term = searchInput.value.toLowerCase();
+            const showExhibition = check1.checked;
+            const showLandmarks = check2.checked;
 
+            const filtered = allLocations.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(term);
+                // Simple logic: if 'exhibition' checked, show items with category 'exhibition', etc.
+                // Note: Ensure your JSON has "category": "exhibition" or "landmark"
+                let matchesCategory = false;
+                if (showExhibition && item.category === 'exhibition') matchesCategory = true;
+                if (showLandmarks && (item.category === 'landmark' || item.category === 'doors')) matchesCategory = true;
 
-function locateUser() {
-    map.locate({setView: true, maxZoom: 16}); // setView: true 表示地图会自动飞到你的位置
-}
+                return matchesSearch && matchesCategory;
+            });
 
+            renderMarkers(filtered);
+        }
 
-function onLocationFound(e) {
-    var radius = e.accuracy;
-
-    // 用户位置蓝色圆点
-    L.circleMarker(e.latlng, {
-        radius: 8,
-        fillColor: "#3388ff",
-        color: "#fff",
-        weight: 2,
-        opacity: 1,
-        fillOpacity: 0.8
-    }).addTo(map)
-      .bindPopup("You are here").openPopup();
-
-  
-    L.circle(e.latlng, radius).addTo(map);
-}
-
-//定位失败报错
-function onLocationError(e) {
-    alert("无法获取您的位置: " + e.message);
-}
+        // Add Event Listeners
+        searchInput.addEventListener('input', filterData);
+        check1.addEventListener('change', filterData);
+        check2.addEventListener('change', filterData);
 
 
-map.on('locationfound', onLocationFound);
-map.on('locationerror', onLocationError);
+        // --- 6. Geolocation Logic ---
+        function locateUser() {
+            map.locate({setView: true, maxZoom: 16});
+        }
 
+        function onLocationFound(e) {
+            var radius = e.accuracy;
+            L.circleMarker(e.latlng, {
+                radius: 8,
+                fillColor: "#3388ff",
+                color: "#fff",
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup("You are here").openPopup();
+            L.circle(e.latlng, radius).addTo(map);
+        }
 
-<button onclick="locateUser()" style="background: #a7c7e7; border: 1px solid black; padding: 5px 10px; cursor: pointer;">
-    📍 Find My Location
-</button>
+        function onLocationError(e) {
+            alert("Error finding location: " + e.message);
+        }
+
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
 
     </script>
-
 </body>
 </html>

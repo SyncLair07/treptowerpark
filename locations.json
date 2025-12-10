@@ -1,18 +1,63 @@
 [
   {
     "id": 1,
-    "name": "Colonial Exhibition Entrance",
-    "lat": 52.4875,
-    "lng": 13.4677,
+    "name": "Main Exhibition Building",
+    "lat": 52.489778,
+    "lng": 13.463806,
     "category": "exhibition",
-    "description": "The main entrance gate stood here in 1896."
+    "description": "The monumental main hall of the 1896 Industrial Exhibition.",
+    "img": "images/ArchivalPic/illuszeitung.jpg",
+    "link": "archive.html"
   },
   {
     "id": 2,
-    "name": "water",
-    "lat": 52.4880,
-    "lng": 13.4690,
+    "name": "Cairo Section - Arena",
+    "lat": 52.485083,
+    "lng": 13.464833,
     "category": "landmark",
-    "description": "A historic xxx remaining from the era."
+    "description": "The central arena within the reconstructed Cairo street.",
+    "img": "images/Kairo/kairogates(2).JPG",
+    "link": "archive.html#cairo"
+  },
+  {
+    "id": 3,
+    "name": "Cairo Section - Entrance",
+    "lat": 52.484278,
+    "lng": 13.465250,
+    "category": "landmark",
+    "description": "Entrance to the replicate Kairo.",
+    "img": "images/Kairo/kairogates(1).JPG",
+    "link": "archive.html#cairo"
+  },
+  {
+    "id": 4,
+    "name": "Cameroon Pavilion",
+    "lat": 52.484167,
+    "lng": 13.469722,
+    "category": "exhibition",
+    "description": "The pavilion showcasing the German colony of Cameroon.",
+    "img": "images/ArchivalPic/Pavillion_1.jpg",
+    "link": "archive.html"
+  },
+  {
+    "id": 5,
+    "name": "Togo Village",
+    "lat": 52.483861,
+    "lng": 13.470444,
+    "category": "exhibition",
+    "description": "The reconstructed village setting for Togo.",
+    "img": "images/ArchivalPic/Simmel_Writing.jpg",
+    "link": "archive.html"
+  },
+  {
+    "id": 6,
+    "name": "South Africa (Transvaal)",
+    "lat": 52.482389,
+    "lng": 13.474000,
+    "category": "exhibition",
+    "description": "Pavillion of South African Republic (Transvaal).",
+    "img": "images/ArchivalPic/illuszeitung.jpg",
+    "link": "archive.html"
   }
+  
 ]

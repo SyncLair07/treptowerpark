@@ -123,6 +123,7 @@ body.welcome-page { padding-top: var(--nav-height); }
     display: flex;
     height: calc(100vh - var(--nav-height));
     margin-top: var(--nav-height);
+    position: relative;
     overflow: hidden; /* Prevents double scrollbars */
 }
 
@@ -151,6 +152,7 @@ body.welcome-page { padding-top: var(--nav-height); }
     flex: 1; /* Takes up all remaining width */
     display: flex;
     flex-direction: column;
+    height:100%;
 }
 
 /* The Map Area */
